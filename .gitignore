@@ -1,2 +1,4 @@
 .myenv
 requirements.txt
+__pycache__
+instance

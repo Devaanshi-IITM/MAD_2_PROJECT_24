@@ -1,0 +1,29 @@
+/*Side navbar Styling*/
+
+.sidenav {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 250px;
+    background-color: rgb(242, 242, 61);
+    padding-top: 20px;
+}
+.sidenav h2 {
+    margin-bottom: 20px;
+}
+.content {
+    margin-left: 260px; /* Adjust this if you change the sidenav width */
+    padding: 20px;
+    display: flex;
+}
+
+
+/* Login form styling */
+.login-form-container {
+    margin-left: 550px;
+    margin-top: 150px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
