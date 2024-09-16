@@ -1,9 +1,7 @@
 import router from "./router.js"
 import Navbar from "./components/Navbar.js"
 
-const isAuthenticated = localStorage.getItem('auth-token')? true : false
-
-
+//const isAuthenticated = localStorage.getItem('auth-token') ? true : false
 
 router.beforeEach((to, from, next) => {
     if (to.name !== 'Login' && !localStorage.getItem('auth-token') ? true : false)
@@ -14,8 +12,8 @@ router.beforeEach((to, from, next) => {
 
 new Vue({
     el: "#app",
-    template: `<div>
-    <Navbar />
+    template: `<div class="m-3">
+    <Navbar style="text-align:center"/>
     <router-view /></div>`,
     router,
     components: {

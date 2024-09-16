@@ -1,29 +1,36 @@
 export default {
     template: `
     <div class="sidenav">
-        <h2 class="text-center">OneTap</h2>
+        <h2 class="text-center"></h2>
         <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Services</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Customer Signup</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Professional Signup</a>
-            </li>
+
+            <img src="static/logo.png" alt="Logo" style="margin-left: 50 px; "width="200"  class="d-inline-block align-top">
 
             <li class="nav-item">
-                <a class="nav-link" href="#">Contact</a>
+                <router-link class="nav-link active" to="/">Home</router-link>
+            </li>
+            <li class="nav-item" v-if="role=='admin'">
+                <router-link class="nav-link" to="/users">Users</router-link>
+            </li>
+            
+            <li class="nav-item " v-if='is_login'>
+               <a class="nav-link" @click="logout" style="text-decoration: none; color: #007bff; cursor: pointer;">Logout</a>
             </li>
         </ul>
     </div>
     `,
-    
+data(){
+    return {
+        role: localStorage.getItem('role'),
+        is_login : localStorage.getItem('auth-token'),
+    }
+},
+methods: {
+    logout(){
+        localStorage.removeItem('auth-token')
+        localStorage.removeItem('role')
+        this.$router.push('/login')
+    },
+},
+
 }

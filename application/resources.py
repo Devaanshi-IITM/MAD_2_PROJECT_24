@@ -1,4 +1,5 @@
 from flask_restful import Resource, Api, reqparse, marshal_with, fields
+from flask_security import auth_required, roles_required, current_user
 from application.models import db, Service  # Ensure correct import
 from flask import Flask
 
@@ -23,13 +24,16 @@ service_fields = {
 
 class AllServices(Resource):
     @marshal_with(service_fields)
+    @auth_required("token")
     def get(self):
         all_services = Service.query.all()
         return all_services
     
+    @auth_required("token")
+    @roles_required("admin")
     def post(self):
         args = parser.parse_args()
-        service = Service(**args)
+        service = Service(name = args.get("name"), price = args.get("price"), duration = args.get("duration"), description = args.get("description"))
         db.session.add(service)
         db.session.commit()
         return {"message": "Service created successfully!"}, 201

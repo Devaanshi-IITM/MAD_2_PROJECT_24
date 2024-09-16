@@ -18,7 +18,7 @@ export default {
           {{ error }}
         </div>
       </form>
-      <div class='text-danger'>*{{error}}</div>
+      
     </div>
     `,
     data(){
@@ -43,6 +43,7 @@ export default {
       const data = await res.json()
       if(res.ok){
         localStorage.setItem('auth-token', data.token)
+        localStorage.setItem('role', data.role) 
         this.$router.push({path: '/'})
       }else {
         this.error = data.message

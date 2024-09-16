@@ -49,3 +49,19 @@ def user_login():
         return jsonify({"token": user.get_auth_token(), "email": user.email, "role": user.roles[0].name})
     else:
         return jsonify({"message": "Wrong Password"}), 400
+
+# to serialize users data
+user_fileds = {
+    "id": fields.Integer,
+    "email": fields.String,
+    "active": fields.Boolean
+}
+
+@app.get('/users')
+@auth_required("token")
+@roles_required("admin")
+def all_users():
+    users = User.query.all()
+    if len(users) == 0:
+        return jsonify({"message": "No User Found !"}),404
+    return marshal(users, user_fileds)
