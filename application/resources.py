@@ -1,7 +1,9 @@
-from flask_restful import Resource, Api, reqparse, marshal_with, fields
+from flask_restful import Resource, Api, reqparse, marshal, fields
 from flask_security import auth_required, roles_required, current_user
+from flask import jsonify
+from sqlalchemy import or_
 from application.models import db, Service  # Ensure correct import
-from flask import Flask
+
 
 # Create an Api instance (ensure this is created in the context of your Flask app)
 api = Api(prefix='/api')
@@ -23,11 +25,20 @@ service_fields = {
 }
 
 class AllServices(Resource):
-    @marshal_with(service_fields)
     @auth_required("token")
     def get(self):
-        all_services = Service.query.all()
-        return all_services
+        if 'customer' in current_user.roles:
+            # Query all services if user is a customer
+            all_services = Service.query.all()
+            
+            # Check if any services were found
+            if all_services:
+                return marshal(all_services, service_fields)
+            else:
+                return {"message": "Service not Found"}, 404
+        else:
+            # User does not have the 'customer' role
+            return {"message": "Service not Found."}, 404
     
     @auth_required("token")
     @roles_required("admin")

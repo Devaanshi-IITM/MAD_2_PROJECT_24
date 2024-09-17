@@ -13,10 +13,19 @@ router.beforeEach((to, from, next) => {
 new Vue({
     el: "#app",
     template: `<div class="m-3">
-    <Navbar style="text-align:center"/>
+    <Navbar :key='has_changed' />
     <router-view /></div>`,
     router,
     components: {
         Navbar,
+    },
+    data: {
+        has_changed: true,
+    },
+    watch: {
+      $route(to, from){
+        this.has_changed = !this.has_changed
+
+      },
     },
 })

@@ -12,7 +12,9 @@ export default {
             <li class="nav-item" v-if="role=='admin'">
                 <router-link class="nav-link" to="/users">Users</router-link>
             </li>
-            
+            <li class="nav-item" v-if="role=='admin'">
+                <router-link class="nav-link" to="/create-service">Create Service</router-link>
+            </li>
             <li class="nav-item " v-if='is_login'>
                <a class="nav-link" @click="logout" style="text-decoration: none; color: #007bff; cursor: pointer;">Logout</a>
             </li>
