@@ -2,7 +2,7 @@ from flask import current_app as app, jsonify, request, render_template
 from flask_security import auth_required, roles_required
 from werkzeug.security import check_password_hash
 from flask_restful import marshal, fields
-from .models import User, Role, db
+from .models import User, Role, db, Service
 from .security import datastore
 
 
@@ -57,6 +57,7 @@ user_fileds = {
     "active": fields.Boolean
 }
 
+# for admin to see all users
 @app.get('/users')
 @auth_required("token")
 @roles_required("admin")
@@ -65,3 +66,14 @@ def all_users():
     if len(users) == 0:
         return jsonify({"message": "No User Found !"}),404
     return marshal(users, user_fileds)
+
+# for customer to request a service
+@app.get('/service/<int:id>/request')
+@auth_required("token")
+@roles_required("customer")
+def request_service(id):
+    service = Service.query.get(id)
+    if not service:
+        return jsonify({"message": "Service not found"}), 404
+    else:
+        return jsonify({"message": "Service request successful"}), 200

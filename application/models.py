@@ -53,7 +53,6 @@ class Service(db.Model):
     duration = db.Column(db.String, nullable = False)
     description = db.Column(db.String)
 
-
 class ServiceRequest():
     id = db.Column(db.Integer, autoincrement=True, primary_key = True)
     service_id = db.Column(db.Integer, db.ForeignKey('service.id'))

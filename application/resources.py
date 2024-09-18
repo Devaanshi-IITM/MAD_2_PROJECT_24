@@ -28,16 +28,12 @@ class AllServices(Resource):
     @auth_required("token")
     def get(self):
         if 'customer' in current_user.roles:
-            # Query all services if user is a customer
             all_services = Service.query.all()
-            
-            # Check if any services were found
             if all_services:
                 return marshal(all_services, service_fields)
             else:
                 return {"message": "Service not Found"}, 404
         else:
-            # User does not have the 'customer' role
             return {"message": "Service not Found."}, 404
     
     @auth_required("token")
