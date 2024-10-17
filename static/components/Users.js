@@ -1,5 +1,5 @@
 export default {
-    template:`<div style="margin-left: 400px">
+    template:`<div style="margin-top: 40px">
         <div v-if="error"> {{error}} </div>
         <div v-for="(user, index) in allUsers">
         {{user.email}} 
