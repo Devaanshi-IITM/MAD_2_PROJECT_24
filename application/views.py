@@ -54,7 +54,8 @@ def user_login():
 user_fileds = {
     "id": fields.Integer,
     "email": fields.String,
-    "active": fields.Boolean
+    "active": fields.Boolean,
+    "role": fields.List(fields.String),
 }
 
 # for admin to see all users
@@ -63,9 +64,20 @@ user_fileds = {
 @roles_required("admin")
 def all_users():
     users = User.query.all()
-    if len(users) == 0:
+    if not users:
         return jsonify({"message": "No User Found !"}),404
-    return marshal(users, user_fileds)
+    
+    users_data = []
+    for user in users:
+        user_info = {
+            'id' : user.id,
+            'email' : user.email,
+            'active' : user.active,
+            'role' : [role.name for role in user.roles]
+        }
+        users_data.append(user_info)
+    
+    return jsonify(users_data)
 
 # for customer to request a service
 @app.get('/service/<int:id>/request')

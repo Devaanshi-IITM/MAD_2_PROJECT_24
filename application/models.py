@@ -16,8 +16,9 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String)
     active = db.Column(db.Boolean())
     fs_uniquifier = db.Column(db.String, unique = True, nullable = False)
+    #is_flagged = db.Column(db.Boolean())
     roles = db.relationship('Role', secondary = 'roles_users', backref = db.backref('users', lazy = 'dynamic'))
-
+    
    
 class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key = True)
