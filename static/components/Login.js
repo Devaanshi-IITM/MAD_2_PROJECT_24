@@ -14,6 +14,7 @@ export default {
 
         <button class="btn btn-primary" @click='login' >Login</button>
 
+
         <div v-if="error" class="alert alert-danger mt-3">
           {{ error }}
         </div>
@@ -45,6 +46,7 @@ export default {
         localStorage.setItem('auth-token', data.token)
         localStorage.setItem('role', data.role) 
         this.$router.push({path: '/'})
+        this.$emit('login-success')
       }else {
         this.error = data.message
       }

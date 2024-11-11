@@ -18,6 +18,6 @@ with app.app_context():
     if not datastore.find_user(email="prof@email.com"):
         datastore.create_user(email="prof@email.com", password=generate_password_hash("prof"), roles=["professional"], active=False)
     if not datastore.find_user(email="customer@email.com"):
-        datastore.create_user(email="customer@email.com", password=generate_password_hash("customer"), roles=["customer"])
+        datastore.create_user(email="customer@email.com",password=generate_password_hash("customer"), roles=["customer"])
 
     db.session.commit()

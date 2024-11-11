@@ -11,25 +11,43 @@ export default {
         <ul class="navbar-nav">
             <li class="nav-item">
                 <router-link class="nav-link active" to="/">
-                    <i class="bi bi-house-door"></i> Home
+                    <i class="fas fa-home"></i> Home
                 </router-link>
-            </li>
             <li class="nav-item" v-if="role=='admin'">
                 <router-link class="nav-link" to="/users">
-                    <i class="bi bi-person"></i> Users
+                    <i class="fas fa-users"></i> Users
                 </router-link>
             </li>
             <li class="nav-item" v-if="role=='admin'">
                 <router-link class="nav-link" to="/create-service">
-                    <i class="bi bi-plus-circle"></i>Create Service
+                    <i class="fas fa-plus-circle"></i> Create Service
                 </router-link>
             </li>
             <li class="nav-item" v-if="role=='customer'">
-                <router-link class="nav-link" to="/api/services">Services</router-link>
+                <router-link class="nav-link" to="/api/services">
+                    <i class="fas fa-concierge-bell"></i> Services
+                </router-link>
             </li>
+
+            <!-- Register Dropdown -->
+            <li class="nav-item dropdown" v-if="!is_login" style="margin-left:850px;">
+                <a class="nav-link dropdown-toggle" to="#" id="registerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="registerDropdown">
+                    <li>
+                        <router-link class="dropdown-item" to="/register/prof">Register as Professional</router-link>
+                    </li>
+                    <li>
+                        <router-link class="dropdown-item" to="/register/customer">Register as Customer</router-link>
+                    </li>
+                </ul>
+            </li>
+
+
             <li class="nav-item" v-if='is_login' style="margin-left:650px;">
                 <a class="nav-link" @click="logout" style="cursor: pointer;">
-                    <i class="bi bi-power"></i> Logout
+                    <i class="fas fa-power-off"></i> Logout
                 </a>
             </li>
         </ul>
@@ -41,6 +59,8 @@ data(){
     return {
         role: localStorage.getItem('role'),
         is_login : localStorage.getItem('auth-token'),
+        showRegistration: false,  // Toggle the registration form
+        isProfessional: true, 
     }
 },
 methods: {
@@ -48,6 +68,12 @@ methods: {
         localStorage.removeItem('auth-token')
         localStorage.removeItem('role')
         this.$router.push('/login')
+    },
+    toggleRegistration() {
+        this.showRegistration = !this.showRegistration; // Toggle registration visibility
+      },
+    toggleRole(isProfessional) {
+    this.isProfessional = isProfessional; // Set the registration role type
     },
 },
 

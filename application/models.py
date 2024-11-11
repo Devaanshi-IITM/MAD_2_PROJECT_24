@@ -1,42 +1,42 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import UserMixin, RoleMixin
+from datetime import datetime
 
 db = SQLAlchemy()
 
 class RolesUsers(db.Model):
     __tablename__ = 'roles_users'
-    id = db.Column(db.Integer(), primary_key = True)
-    user_id = db.Column('user_id', db.Integer(), db.ForeignKey('user.id'))
-    role_id = db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+    role_id = db.Column('role_id', db.Integer, db.ForeignKey('role.id'))
 
 class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, autoincrement=True, primary_key = True)
-    username = db.Column(db.String, unique = False)
+    id = db.Column(db.Integer, primary_key = True)
     email = db.Column(db.String, unique = True)
-    password = db.Column(db.String)
-    active = db.Column(db.Boolean())
-    fs_uniquifier = db.Column(db.String, unique = True, nullable = False)
-    #is_flagged = db.Column(db.Boolean())
-    roles = db.relationship('Role', secondary = 'roles_users', backref = db.backref('users', lazy = 'dynamic'))
+    password = db.Column(db.String, nullable = False)
+    active = db.Column(db.Boolean(), default = True)
+    fs_uniquifier = db.Column(db.String, unique = True)
+    is_flagged = db.Column(db.Boolean(), default = False)
+    roles = db.Relationship('Role', secondary = 'roles_users', backref = db.backref('users', lazy = 'dynamic'))
     
    
 class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(80), unique = True)
-    description = db.Column(db.String(255))
+    name = db.Column(db.String, unique = True, nullable = False)
+    description = db.Column(db.String, nullable = False)
 
 class Professional(db.Model):
-    id =  db.Column(db.Integer, autoincrement=True, primary_key = True)
+    id =  db.Column(db.Integer, primary_key = True)
     prof_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False) 
     name = db.Column(db.String)
-    registration_date = db.Column(db.DateTime, nullable=False)
+    registration_date = db.Column(db.DateTime, index = True, default = datetime.now())
     service_name = db.Column(db.String)
     experience = db.Column(db.Float)
     document = db.Column(db.String)
     contact = db.Column(db.Integer)
     address = db.Column(db.String, nullable = False)
     pincode = db.Column(db.Integer, nullable = False)
-    user = db.relationship('User', backref = 'professional')
+    user = db.Relationship('User', backref = 'professional')
 
 class Customer(db.Model):
     id =  db.Column(db.Integer, autoincrement=True, primary_key = True)
@@ -45,7 +45,7 @@ class Customer(db.Model):
     contact = db.Column(db.Integer)
     address = db.Column(db.String, nullable = False)
     pincode = db.Column(db.Integer, nullable = False)
-    user = db.relationship('User', backref = 'customer')
+    user = db.Relationship('User', backref = 'customer')
 
 class Service(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key = True)
@@ -59,7 +59,7 @@ class ServiceRequest():
     service_id = db.Column(db.Integer, db.ForeignKey('service.id'))
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
     professional_id = db.Column(db.Integer, db.ForeignKey('professional.id'))
-    request_date = db.Column(db.DateTime, nullable=False)
+    request_date = db.Column(db.DateTime, index = True, default = datetime.now())
     servicing_date = db.Column(db.DateTime, nullable=False)
     service_status = db.Column(db.String, default = 'requested')
     remarks = db.Column(db.String(250))
@@ -70,5 +70,5 @@ class Review(db.Model):
     cust_id  = db.Column(db.Integer, db.ForeignKey('customer.id'))
     rating = db.Column(db.Float)
     review_text = db.Column(db.String(250))
-    professional = db.relationship('Professional', backref ='reviews')
-    customer = db.relationship('Customer', backref ='reviews')
+    professional = db.Relationship('Professional', backref ='reviews')
+    customer = db.Relationship('Customer', backref ='reviews')
